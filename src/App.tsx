@@ -3,7 +3,6 @@ import { ToastContainer } from 'react-toastify';
 import { Container } from '@material-ui/core';
 import AppProviders from './AppProviders';
 import Header from './components/Header';
-import NowWhat from './components/NowWhat';
 import { ChartProvider } from './Features/Chart/chart-context';
 import Subscriber from './subscription/Subscriber';
 
@@ -12,8 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@material-ui/core/styles';
 
 const styles = makeStyles({
-  container: {margin: '2.5% auto'}
-})
+  container: { margin: '2.5% auto' },
+});
 
 const App = () => {
   const classes = styles();
@@ -25,11 +24,10 @@ const App = () => {
       <Container className={classes.container}>
         {/* main page content goes in here */}
         <ChartProvider />
-        {/*<NowWhat />*/}
       </Container>
       <ToastContainer />
     </AppProviders>
-  )
+  );
 };
 
 export default App;

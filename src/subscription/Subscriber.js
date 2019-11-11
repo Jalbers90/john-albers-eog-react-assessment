@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSubscription } from "urql";
+import { useSubscription } from 'urql';
 import { actions } from './reducer';
 
 const sub = `
@@ -15,12 +15,12 @@ function Subscriber() {
   const { data } = subscriptionResponse;
   //console.log(data);
   useEffect(() => {
-    if(!data) return
+    if (!data) return;
     // dispatch to redux
     const { newMeasurement } = data;
-    dispatch(actions.newMeasurementReceived(newMeasurement))
-  }, [data])
-  return(null)
+    dispatch(actions.newMeasurementReceived(newMeasurement));
+  }, [data, dispatch]);
+  return null;
 }
 
-export default Subscriber
+export default Subscriber;

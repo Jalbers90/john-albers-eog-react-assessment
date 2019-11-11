@@ -17,7 +17,8 @@ query($latLong: WeatherQuery!) {
 }
 `;
 
-const getWeather = (state: IState) => { // redux selector
+const getWeather = (state: IState) => {
+  // redux selector
   const { temperatureinFahrenheit, description, locationName } = state.weather;
   return {
     temperatureinFahrenheit,
@@ -30,7 +31,8 @@ const Weather = () => {
   const getLocation = useGeolocation();
   const dispatch = useDispatch();
   const { temperatureinFahrenheit, description, locationName } = useSelector(getWeather);
-  const latLong = { // Default to houston
+  const latLong = {
+    // Default to houston
     latitude: getLocation.latitude || 29.7604,
     longitude: getLocation.longitude || -95.3698,
   };
@@ -58,4 +60,4 @@ const Weather = () => {
   return <Chip label={`Weather in ${locationName}: ${description} and ${temperatureinFahrenheit}°`} />;
 };
 
-export default Weather
+export default Weather;

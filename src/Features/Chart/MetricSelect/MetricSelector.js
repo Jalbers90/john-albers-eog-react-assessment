@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from 'urql';
-import { Select, FormControl, InputLabel, MenuItem, Input, Chip,
-  Checkbox, ListItemText, LinearProgress } from '@material-ui/core';
+import { Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useChart } from '../chart-context';
-import { Query } from "urql";
 import { actions } from './reducer';
 
 const styles = makeStyles({
   formControl: {
-      width: 120
-    }
+    width: 120,
+  },
 });
 
 const ITEM_HEIGHT = 48;
@@ -31,12 +29,12 @@ const query = `query {getMetrics}`;
 function MetricSelector(props) {
   const classes = styles();
   const dispatch = useDispatch();
-  const metrics = useSelector((state) => state.metrics);
-  const [ { selected }, chartDispatch ] = useChart();
-  const handleChange = (e) => {
-    chartDispatch({type: 'SELECT_METRIC', payload: e.target.value});
-  }
-  const { fetching, data, error } = useQuery({query})[0];
+  const metrics = useSelector(state => state.metrics);
+  const [{ selected }, chartDispatch] = useChart();
+  const handleChange = e => {
+    chartDispatch({ type: 'SELECT_METRIC', payload: e.target.value });
+  };
+  const { fetching, data, error } = useQuery({ query })[0];
 
   useEffect(() => {
     if (error) {
@@ -50,26 +48,27 @@ function MetricSelector(props) {
 
   return (
     <FormControl className={classes.formControl}>
-       <InputLabel >Metrics</InputLabel>
-       <Select
-         id="demo-mutiple-checkbox"
-         multiple
-         value={selected}
-         onChange={handleChange}
-         input={<Input />}
-         renderValue={selected => ' ... '}
-         MenuProps={MenuProps}
-       >
-          {fetching && <MenuItem>Loading Options</MenuItem>}
-         {metrics && metrics.map(metric => (
-           <MenuItem key={metric} value={metric}>
-             <Checkbox checked={selected.indexOf(metric) > -1} />
-             <ListItemText primary={metric} />
-           </MenuItem>
-         ))}
-       </Select>
-     </FormControl>
-  )
+      <InputLabel>Metrics</InputLabel>
+      <Select
+        id="demo-mutiple-checkbox"
+        multiple
+        value={selected}
+        onChange={handleChange}
+        input={<Input />}
+        renderValue={selected => ' ... '}
+        MenuProps={MenuProps}
+      >
+        {fetching && <MenuItem>Loading Options</MenuItem>}
+        {metrics &&
+          metrics.map(metric => (
+            <MenuItem key={metric} value={metric}>
+              <Checkbox checked={selected.indexOf(metric) > -1} />
+              <ListItemText primary={metric} />
+            </MenuItem>
+          ))}
+      </Select>
+    </FormControl>
+  );
 }
 
-export default MetricSelector
+export default MetricSelector;

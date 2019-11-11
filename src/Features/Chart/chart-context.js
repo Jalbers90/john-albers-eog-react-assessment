@@ -4,24 +4,24 @@ import ChartContainer from './ChartContainer';
 const ChartContext = React.createContext();
 
 function reducer(state, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'CHANGE_PAST_DATA': {
       return {
         ...state,
-        pastData: action.payload
-      }
+        pastData: action.payload,
+      };
     }
     case 'SELECT_METRIC': {
       return {
         ...state,
-        selected: action.payload
-      }
+        selected: action.payload,
+      };
     }
     case 'REMOVE_METRIC': {
       return {
         ...state,
-        selected: state.selected.filter((metric) => metric !== action.payload)
-      }
+        selected: state.selected.filter(metric => metric !== action.payload),
+      };
     }
     default:
       return state;
@@ -30,16 +30,16 @@ function reducer(state, action) {
 
 const initialState = {
   selected: [],
-  pastData: []
+  pastData: [],
 };
 
 function ChartProvider(props) {
   const stateHook = useReducer(reducer, initialState);
   return (
-    <ChartContext.Provider value={stateHook} {...props} >
+    <ChartContext.Provider value={stateHook} {...props}>
       <ChartContainer />
     </ChartContext.Provider>
-  )
+  );
 }
 
 const useChart = () => React.useContext(ChartContext);
