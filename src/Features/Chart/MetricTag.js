@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Card, Typography, CardContent } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from "@material-ui/core/styles";
+import { useChart } from './chart-context';
 
 const useStyles = makeStyles({
   card: {
@@ -33,6 +34,7 @@ const getLastNewMeasurement = ({newMeasurements}) => {
 
 function MetricTag({name}) {
   const classes = useStyles();
+  const chartDispatch = useChart()[1];
   const [ value, setValue ] = useState('...')
   const newMeasurement = useSelector(getLastNewMeasurement);
 
@@ -46,7 +48,12 @@ function MetricTag({name}) {
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
-        <CloseIcon className={classes.icon} onClick={() => console.log('click')}/>
+        <CloseIcon
+          className={classes.icon}
+          onClick={() => {
+            chartDispatch({type: 'REMOVE_METRIC', payload: name})}
+          }
+        />
         <Typography variant='body2'>{name}</Typography>
         <Typography variant={"subtitle2"}>{value}</Typography>
       </CardContent>

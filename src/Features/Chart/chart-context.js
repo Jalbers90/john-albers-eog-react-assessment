@@ -17,6 +17,12 @@ function reducer(state, action) {
         selected: action.payload
       }
     }
+    case 'REMOVE_METRIC': {
+      return {
+        ...state,
+        selected: state.selected.filter((metric) => metric !== action.payload)
+      }
+    }
     default:
       return state;
   }
