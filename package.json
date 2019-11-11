@@ -1,6 +1,7 @@
 {
   "name": "eog-react-visualization-base",
   "version": "2.0.0",
+  "proxy": "https://react.eogresources.com",
   "private": true,
   "dependencies": {
     "@amcharts/amcharts4": "^4.7.8",
@@ -21,6 +22,7 @@
     "redux": "^4.0.4",
     "redux-saga": "^1.1.1",
     "redux-starter-kit": "^1.0.0",
+    "subscriptions-transport-ws": "^0.9.16",
     "typescript": "^3.6.4",
     "urql": "^1.6.1",
     "yarn": "^1.19.1"

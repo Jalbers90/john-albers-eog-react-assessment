@@ -43,7 +43,6 @@ const Weather = () => {
   });
 
   const { fetching, data, error } = result;
-
   useEffect(() => {
     if (error) {
       dispatch(actions.weatherApiErrorReceived({ error: error.message }));

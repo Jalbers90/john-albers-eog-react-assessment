@@ -12,8 +12,10 @@ export const updateSeries = (chart, data) => {
     const name = data[0].metric;
     newLine.id = name;
     newLine.name = name;
+
     newLine.dataFields.valueY = 'value'
     newLine.dataFields.dateX = 'at'
+    newLine.tooltipText = "{name}: [bold]{valueY}[/]";
     newLine.yAxis = chart.yAxes.values.find((yAxis) => yAxis.id === unit);
     newLine.data = data[0].measurements;
   }
@@ -40,6 +42,7 @@ export const updateSeries = (chart, data) => {
       newLine.name = name;
       newLine.dataFields.valueY = 'value'
       newLine.dataFields.dateX = 'at'
+      newLine.tooltipText = "{name}: [bold]{valueY}[/]";
       newLine.yAxis = chart.yAxes.values.find((yAxis) => yAxis.id === unit);
       newLine.data = metric.measurements;
     }
@@ -83,19 +86,21 @@ export const removeLast = (chart) => {
   chart.series.removeIndex(0);
 }
 
+export const liveUpdate = (chart, measurement) => {
+  const { metric } = measurement;
+  const series = chart.series.values.find((s) => {
+    return s.id === metric
+  });
+  if(series) {
+    series.addData(measurement);
+  }
+}
+
 export function LineChartInit(chartId) {
+  am4core.options.minPolylineStep = 5;
   var chart = am4core.create(chartId, am4charts.XYChart);
   chart.paddingRight = 20;
   chart.fontSize = 12;
-
-  // var data = [];
-  // var visits = 10;
-  // for (var i = 1; i < 50000; i++) {
-  //   visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-  //   data.push({ date: new Date(2018, 0, i), value: visits });
-  // }
-  //
-  // chart.data = data;
 
   var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
   dateAxis.renderer.grid.template.location = 0;
@@ -103,22 +108,8 @@ export function LineChartInit(chartId) {
   dateAxis.baseInterval = {"timeUnit": "second", "count": 1}
 
   // this makes the data to be grouped
-  dateAxis.groupData = true;
-  dateAxis.groupCount = 500;
-
-  // var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  // valueAxis.id = 'my-id';
-  // var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
-  // valueAxis.id = 'my-id2';
-  //
-  // var series = chart.series.push(new am4charts.LineSeries());
-  // series.dataFields.dateX = "date";
-  // series.dataFields.valueY = "value";
-  // series.tooltipText = "{valueY}";
-  // series.tooltip.pointerOrientation = "vertical";
-  // series.tooltip.background.fillOpacity = 0.5;
-  // series.strokeWidth = 1;
-  // series.name = 'my data'
+  // dateAxis.groupData = true;
+  // dateAxis.groupCount = 500;
 
   chart.cursor = new am4charts.XYCursor();
   chart.cursor.xAxis = dateAxis;

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { Grid, Box, Paper, Typography } from '@material-ui/core';
 import { Select, FormControl, InputLabel, MenuItem, Input, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from 'urql';
-import MetricSelector from './MetricSelector';
+import { useQuery, useSubscription } from 'urql';
+import MetricSelector from './MetricSelect/MetricSelector';
 import MetricTag from './MetricTag';
 import Chart from './Chart';
 import { useChart } from './chart-context';
@@ -42,13 +42,13 @@ function ChartContainer(props) {
       input: selected.map((metricName) => ({metricName, after: thirtyMinAgo}))
     }
   });
+  const { data, fetching, error } = result;
+
   useEffect(() => {
-    const { data, fetching } = result;
     if(!data || fetching) return
     const payload = data.getMultipleMeasurements;
     chartDispatch({type: 'CHANGE_PAST_DATA', payload})
   }, [result, selected])
-
 
   return (
     <Box >
@@ -61,6 +61,7 @@ function ChartContainer(props) {
             </Grid>
           </Grid>
           <Grid item >
+            {error && <Typography >{`${error.message}\nPlease refresh`}</Typography>}
             <Chart />
           </Grid>
         </Grid>

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { useSelector } from 'react-redux';
 import { Card, Typography, CardContent } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -13,18 +15,40 @@ const useStyles = makeStyles({
   },
   cardContent: {
     padding: '4px',
+    position: 'relative'
+  },
+  icon: {
+    position: 'absolute',
+    right: '1px',
+    top: '1px',
+    fontSize: '12px',
+    cursor: 'pointer'
   }
 });
 
-function MetricTag({name}) { // prop is a
-  // get last known measurement goes here
+const getLastNewMeasurement = ({newMeasurements}) => {
+  const last = newMeasurements.length - 1;
+  return newMeasurements[last];
+}
+
+function MetricTag({name}) {
   const classes = useStyles();
+  const [ value, setValue ] = useState('...')
+  const newMeasurement = useSelector(getLastNewMeasurement);
+
+  useEffect(() => {
+    if(newMeasurement.metric === name) {
+      const { unit } = newMeasurement
+      setValue(`${newMeasurement.value.toFixed(2)} ${unit}`)
+    }
+  }, [newMeasurement])
 
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
+        <CloseIcon className={classes.icon} onClick={() => console.log('click')}/>
         <Typography variant='body2'>{name}</Typography>
-        <Typography variant={"subtitle2"}>{'100.00'}</Typography>
+        <Typography variant={"subtitle2"}>{value}</Typography>
       </CardContent>
     </Card>
   );

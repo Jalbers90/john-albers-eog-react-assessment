@@ -4,7 +4,7 @@ import { useQuery } from 'urql';
 import { Select, FormControl, InputLabel, MenuItem, Input, Chip,
   Checkbox, ListItemText, LinearProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useChart } from './chart-context';
+import { useChart } from '../chart-context';
 import { Query } from "urql";
 import { actions } from './reducer';
 

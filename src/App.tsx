@@ -5,6 +5,7 @@ import AppProviders from './AppProviders';
 import Header from './components/Header';
 import NowWhat from './components/NowWhat';
 import { ChartProvider } from './Features/Chart/chart-context';
+import Subscriber from './subscription/Subscriber';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,6 +21,7 @@ const App = () => {
   return (
     <AppProviders>
       <Header />
+      <Subscriber />
       <Container className={classes.container}>
         {/* main page content goes in here */}
         <ChartProvider />
