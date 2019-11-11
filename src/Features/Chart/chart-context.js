@@ -5,10 +5,16 @@ const ChartContext = React.createContext();
 
 function reducer(state, action) {
   switch(action.type) {
+    case 'CHANGE_PAST_DATA': {
+      return {
+        ...state,
+        pastData: action.payload
+      }
+    }
     case 'SELECT_METRIC': {
       return {
         ...state,
-        metrics: action.payload
+        selected: action.payload
       }
     }
     default:
@@ -17,8 +23,8 @@ function reducer(state, action) {
 }
 
 const initialState = {
-  metrics: [],
-  selected: []
+  selected: [],
+  pastData: []
 };
 
 function ChartProvider(props) {

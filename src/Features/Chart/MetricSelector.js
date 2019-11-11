@@ -1,7 +1,12 @@
-import React from 'react';
-import { Select, FormControl, InputLabel, MenuItem, Input, Chip, Checkbox, ListItemText } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from 'urql';
+import { Select, FormControl, InputLabel, MenuItem, Input, Chip,
+  Checkbox, ListItemText, LinearProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useChart } from './chart-context';
+import { Query } from "urql";
+import { actions } from './reducer';
 
 const styles = makeStyles({
   formControl: {
@@ -20,55 +25,46 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+// my stuff
+const query = `query {getMetrics}`;
 
 function MetricSelector(props) {
   const classes = styles();
-  const [personName, setPersonName] = React.useState([]);
-  const [ metrics, setMetrics ] = useChart();
+  const dispatch = useDispatch();
+  const metrics = useSelector((state) => state.metrics);
+  const [ { selected }, chartDispatch ] = useChart();
   const handleChange = (e) => {
-    //setMetrics({type: 'SELECT_METRIC', payload: e.target.value})
-    setPersonName(e.target.value);
-    console.log(personName);
-  };
-  // const handleChangeMultiple = event => {
-  //   const { options } = event.target;
-  //   const value = [];
-  //   for (let i = 0, l = options.length; i < l; i += 1) {
-  //     if (options[i].selected) {
-  //       value.push(options[i].value);
-  //     }
-  //   }
-  //   setPersonName(options);
-  //   console.log()
-  // };
+    chartDispatch({type: 'SELECT_METRIC', payload: e.target.value});
+  }
+  const { fetching, data, error } = useQuery({query})[0];
+
+  useEffect(() => {
+    if (error) {
+      dispatch(actions.metricsApiErrorReceived({ error: error.message }));
+      return;
+    }
+    if (!data) return;
+    const { getMetrics } = data;
+    dispatch(actions.metricsReceived(getMetrics));
+  }, [dispatch, data, error]);
+
   return (
     <FormControl className={classes.formControl}>
        <InputLabel >Metrics</InputLabel>
        <Select
          id="demo-mutiple-checkbox"
          multiple
-         value={personName}
+         value={selected}
          onChange={handleChange}
          input={<Input />}
-         renderValue={selected => selected.join(', ')}
+         renderValue={selected => ' ... '}
          MenuProps={MenuProps}
        >
-         {names.map(name => (
-           <MenuItem key={name} value={name}>
-             <Checkbox checked={personName.indexOf(name) > -1} />
-             <ListItemText primary={name} />
+          {fetching && <MenuItem>Loading Options</MenuItem>}
+         {metrics && metrics.map(metric => (
+           <MenuItem key={metric} value={metric}>
+             <Checkbox checked={selected.indexOf(metric) > -1} />
+             <ListItemText primary={metric} />
            </MenuItem>
          ))}
        </Select>
